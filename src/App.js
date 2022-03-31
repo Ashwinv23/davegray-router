@@ -37,7 +37,21 @@ function App() {
     },
   ]);
   const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchResults, setSearchResults] = useState([]);
+  const [postTitle, setPostTitle] = useState("");
+  const [postBody, setPostBody] = useState("");
+  const history = useHistory();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
+  };
+
+  const handleDelete = (id) => {
+    const newPosts = posts.filter((post) => post.id !== id);
+    setPosts(newPosts);
+    history.push("/");
+  };
 
   return (
     <div className="App">
@@ -48,10 +62,16 @@ function App() {
           <Home posts={posts} />
         </Route>
         <Route exact path="/post">
-          <NewPost />
+          <NewPost
+            postTitle={postTitle}
+            setPostTitle={setPostTitle}
+            postBody={postBody}
+            setPostBody={setPostBody}
+            handleSubmit={handleSubmit}
+          />
         </Route>
         <Route path="/post/:id">
-          <PostPage />
+          <PostPage posts={posts} handleDelete={handleDelete} />
         </Route>
         <Route path="/about" component={About} />
         <Route path="*" component={Missing} />
