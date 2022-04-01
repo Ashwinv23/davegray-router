@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import About from "./About";
 import Home from "./Home";
 import NewPost from "./NewPost";
+import EditPost from "./EditPost";
 import PostPage from "./PostPage";
 import Missing from "./Missing";
 import { Route, Switch, useHistory } from "react-router-dom";
@@ -17,6 +18,8 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState("");
   const [postBody, setPostBody] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editBody, setEditBody] = useState("");
   const history = useHistory();
 
   useEffect(() => {
@@ -54,11 +57,27 @@ function App() {
     try {
       const response = await api.post("/posts", newPost);
       setPosts((prevState) => [...prevState, response.data]);
-      setPostBody("");
       setPostTitle("");
+      setPostBody("");
       history.push("/");
     } catch (err) {
       console.log(`Error: ${err.message}`);
+    }
+  };
+
+  const handleEdit = async (id) => {
+    const datetime = format(new Date(), "MMMM dd, yyyy pp");
+    const editedPost = { id, title: editTitle, datetime, body: editBody };
+    try {
+      const response = await api.put(`/posts/${id}`, editedPost);
+      setPosts(
+        posts.map((post) => (post.id === id ? { ...response.data } : post))
+      );
+      setEditTitle("");
+      setEditBody("");
+      history.push("/");
+    } catch (err) {
+      console.log(`Error: ${err.mesage}`);
     }
   };
 
@@ -88,6 +107,16 @@ function App() {
             postBody={postBody}
             setPostBody={setPostBody}
             handleSubmit={handleSubmit}
+          />
+        </Route>
+        <Route path="/edit/:id">
+          <EditPost
+            posts={posts}
+            editTitle={editTitle}
+            setEditTitle={setEditTitle}
+            editBody={editBody}
+            setEditBody={setEditBody}
+            handleEdit={handleEdit}
           />
         </Route>
         <Route path="/post/:id">
