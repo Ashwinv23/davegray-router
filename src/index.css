@@ -160,15 +160,22 @@ body {
   min-width: 48px;
   border-radius: 0.25rem;
   padding: 0.5rem;
+  margin-right: 0.5rem;
   font-size: 1rem;
-  background-color: rgb(218, 80, 80);
   color: #fff;
   cursor: pointer;
 }
 
-.Missing h2,
-.PostPage h2,
+.editBtn {
+  background-color: #333;
+}
+
+.deleteBtn {
+  background-color: rgb(218, 80, 80);
+}
+
 .Missing p,
+.NewPost p,
 .PostPage p {
   margin-bottom: 1rem;
 }
