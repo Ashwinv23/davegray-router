@@ -11,7 +11,8 @@ import Missing from "./Missing";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { format } from "date-fns";
 import api from "./api/posts";
-import useWindowSize from "./hooks/useWindowSize";
+// import useWindowSize from "./hooks/useWindowSize";
+import { DataProvider } from "./context/DataContext";
 
 function App() {
   const [posts, setPosts] = useState([]);
@@ -22,7 +23,7 @@ function App() {
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
   const history = useHistory();
-  const { width } = useWindowSize();
+  // const { width } = useWindowSize();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -95,40 +96,42 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Header title="React JS Blog" width={width} />
-      <Nav search={search} setSearch={setSearch} />
-      <Switch>
-        <Route exact path="/">
-          <Home posts={searchResults} />
-        </Route>
-        <Route exact path="/post">
-          <NewPost
-            postTitle={postTitle}
-            setPostTitle={setPostTitle}
-            postBody={postBody}
-            setPostBody={setPostBody}
-            handleSubmit={handleSubmit}
-          />
-        </Route>
-        <Route path="/edit/:id">
-          <EditPost
-            posts={posts}
-            editTitle={editTitle}
-            setEditTitle={setEditTitle}
-            editBody={editBody}
-            setEditBody={setEditBody}
-            handleEdit={handleEdit}
-          />
-        </Route>
-        <Route path="/post/:id">
-          <PostPage posts={posts} handleDelete={handleDelete} />
-        </Route>
-        <Route path="/about" component={About} />
-        <Route path="*" component={Missing} />
-      </Switch>
-      <Footer />
-    </div>
+    <DataProvider>
+      <div className="App">
+        <Header title="React JS Blog" />
+        <Nav search={search} setSearch={setSearch} />
+        <Switch>
+          <Route exact path="/">
+            <Home posts={searchResults} />
+          </Route>
+          <Route exact path="/post">
+            <NewPost
+              postTitle={postTitle}
+              setPostTitle={setPostTitle}
+              postBody={postBody}
+              setPostBody={setPostBody}
+              handleSubmit={handleSubmit}
+            />
+          </Route>
+          <Route path="/edit/:id">
+            <EditPost
+              posts={posts}
+              editTitle={editTitle}
+              setEditTitle={setEditTitle}
+              editBody={editBody}
+              setEditBody={setEditBody}
+              handleEdit={handleEdit}
+            />
+          </Route>
+          <Route path="/post/:id">
+            <PostPage posts={posts} handleDelete={handleDelete} />
+          </Route>
+          <Route path="/about" component={About} />
+          <Route path="*" component={Missing} />
+        </Switch>
+        <Footer />
+      </div>
+    </DataProvider>
   );
 }
 
