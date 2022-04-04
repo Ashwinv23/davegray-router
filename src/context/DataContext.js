@@ -1,8 +1,8 @@
 import { createContext, useState, useEffect } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { format } from "date-fns";
-import api from "./api/posts";
-import useWindowSize from "./hooks/useWindowSize";
+import api from "../api/posts";
+import useWindowSize from "../hooks/useWindowSize";
 
 const DataContext = createContext();
 
@@ -16,7 +16,6 @@ export const DataProvider = ({ children }) => {
   const [editBody, setEditBody] = useState("");
   const history = useHistory();
   const { width } = useWindowSize();
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -88,7 +87,26 @@ export const DataProvider = ({ children }) => {
   };
 
   return (
-    <DataContext.Provider value={(width, search, setSearch, searchResults)}>
+    <DataContext.Provider
+      value={
+        (width,
+        search,
+        setSearch,
+        searchResults,
+        postTitle,
+        setPostTitle,
+        postBody,
+        setPostBody,
+        handleSubmit,
+        posts,
+        editTitle,
+        setEditTitle,
+        editBody,
+        setEditBody,
+        handleEdit,
+        handleDelete)
+      }
+    >
       {children}
     </DataContext.Provider>
   );
